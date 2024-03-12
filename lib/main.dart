@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:tiinkassa_flutter/Hive/hive_class.dart';
 import 'package:tiinkassa_flutter/Hive/hive_instance_class.dart';
-import 'package:tiinkassa_flutter/bloc/addnoproduct/addnoproduct_bloc.dart';
-
 import 'package:tiinkassa_flutter/bloc/cardsifatidaq/addptocard_bloc.dart';
 import 'package:tiinkassa_flutter/bloc/getData/getdata_bloc.dart';
 import 'package:tiinkassa_flutter/bloc/yangi%20qoshuvch/add_product_bloc.dart';
@@ -33,7 +31,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => AddProductBloc()),
         BlocProvider(create: (context) => AddptocardBloc()),
         BlocProvider(create: (context) => GetdataBloc()),
-        BlocProvider(create: (context) => AddnoproductBloc()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

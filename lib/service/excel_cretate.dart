@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
@@ -30,7 +28,6 @@ class ExcelService {
   Future<void> extractFile(List<TotalProduct> element) async {
     final Workbook workbook = Workbook();
     final Worksheet sheet = workbook.worksheets[0];
-
     sheet.getRangeByName('A1').setValue('sku');
     sheet.getRangeByName('B1').setValue('name');
     sheet.getRangeByName('C1').setValue('barcode');
@@ -45,7 +42,7 @@ class ExcelService {
 
     final List<int> bytes = workbook.saveAsStream();
     workbook.dispose();
-    if (Platform.isMacOS || Platform.isWindows) {
+    if (Platform.isMacOS) {
       final Directory? downloadsDir = await getDownloadsDirectory();
       String downloadedPath = '';
       downloadedPath = downloadsDir?.path ?? "";
@@ -55,25 +52,3 @@ class ExcelService {
     }
   }
 }
-
-// class FileService {
-//   const FileService._();
-//   static FileService instance = const FileService._();
-//   static const dir = '/storage/emulated/0/Download';
-//   Future<String> getDownloadPath() async {
-//     final Directory? downloadsDir = await getDownloadsDirectory();
-//     return downloadsDir?.path ?? "";
-//   }
-
-//   Future<void> write(Iterable<Map<String, dynamic>> contents) async {
-//     final file = File('$dir/products.json');
-//     const JsonEncoder encoder = JsonEncoder.withIndent("  ");
-//     await file.writeAsString(encoder.convert(contents));
-//   }
-
-//   Future<List> read() async {
-//     final file = File('$dir/products.json');
-//     String contents = await file.readAsString();
-//     return jsonDecode(contents);
-//   }
-// }

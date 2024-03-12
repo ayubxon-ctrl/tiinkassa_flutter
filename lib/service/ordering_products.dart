@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls, non_constant_identifier_names, avoid_print, unused_local_variable
 import 'package:flutter/material.dart';
 
 import 'package:tiinkassa_flutter/Hive/hive_instance_class.dart';
@@ -58,7 +57,6 @@ class OrderedSingelton {
       price: sale.price,
       category: sale.category,
     );
-    print('p1roduct.price  ${product.price}');
     if (!totalProduct.any((element) => element.barcode == product.barcode)) {
       product.quantity = product.quantity! + 1;
       HiveBoxes.totalPriceBox.put(product.barcode.toString(), product);
@@ -91,15 +89,7 @@ class OrderedSingelton {
     product = TotalProduct(
       name: name,
       barcode: int.parse(barcode),
-      quantity: qcounter,
-      sku: 0,
-      price: num.parse(productPrice),
-      category: "",
-    );
-    products = TotalProduct(
-      name: name,
-      barcode: int.parse(barcode),
-      quantity: qcounter,
+      quantity: 1,
       sku: 0,
       price: num.parse(productPrice),
       category: "",
@@ -107,18 +97,21 @@ class OrderedSingelton {
 
     MainBoxModel? mm =
         HiveBoxes.mainBox.get(product.barcode, defaultValue: null);
-    List<TotalProduct> threecase = HiveBoxes.totalPriceBox.values.toList();
-    if (threecase.isNotEmpty && threecase.last.sku == null && mm == null) {
+    HiveBoxes.totalPriceBox.values.toList();
+    if (mm == null) {
       product.sku = OrderedSingelton.getLastSku();
     } else {
-      product.sku = mm?.sku;
+      product.sku = mm.sku;
+      product.quantity =
+          (HiveBoxes.totalPriceBox.get(product.barcode.toString())!.quantity! +
+              1);
     }
-
+    HiveBoxes.totalPriceBox.get(product.barcode.toString());
     HiveBoxes.totalPriceBox.put(product.barcode.toString(), product);
     return true;
   }
-  //int get LSKUR(){}
 
+  //int get LSKUR(){}
   static int getLastSku() {
     int a;
     a = HiveBoxes.lastSku.get('lastSku');
@@ -133,6 +126,7 @@ class OrderedSingelton {
 
     List<MainBoxModel> setToMainBox = [];
 
+    // ignore: avoid_function_literals_in_foreach_calls
     totalproduct.forEach((element) {
       MainBoxModel mainBox = MainBoxModel(
         name: element.name,
