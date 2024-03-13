@@ -12,7 +12,7 @@ import 'package:tiinkassa_flutter/ui/left_page.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveService.init();
-  await HiveBoxes.lastSku.put('lastSku', 1000);
+  await HiveBoxes.lastSku.put("detectSku", 1000);
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
       create: (context) {

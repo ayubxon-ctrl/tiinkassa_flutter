@@ -5,7 +5,7 @@ class AddProductEvent {}
 class SaveProductEvent extends AddProductEvent {
   final int qcounter;
   final String barcode;
-  final String productPrice;
+  final num productPrice;
   final int sku;
   final String name;
 

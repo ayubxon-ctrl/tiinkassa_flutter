@@ -8,6 +8,7 @@ import 'package:tiinkassa_flutter/bloc/yangi%20qoshuvch/add_product_bloc.dart';
 import 'package:tiinkassa_flutter/model/category/category_model.dart';
 import 'package:tiinkassa_flutter/model/mainbox/mainbox_model.dart';
 import 'package:tiinkassa_flutter/model/totalproduct/totalproduct_model.dart';
+import 'package:tiinkassa_flutter/service/ordering_products.dart';
 
 class RightPage extends StatefulWidget {
   const RightPage({super.key});
@@ -35,12 +36,7 @@ class _RightPageState extends State<RightPage> {
   @override
   Widget build(BuildContext context) {
     bool isSelected = false;
-    BlocProvider.of<AddProductBloc>(context).add(SaveProductEvent(
-        qcounter: qcounter,
-        barcode: '',
-        productPrice: '',
-        sku: 1,
-        name: 'dfjnfdknsnk'));
+
     return Container(
       height: MediaQuery.of(context).size.height * 0.87,
       width: MediaQuery.of(context).size.width * 0.52,
@@ -56,7 +52,7 @@ class _RightPageState extends State<RightPage> {
               totalPrice: 'TotalPrice'),
           BlocConsumer<AddProductBloc, AddProductState>(
               listener: (context, state) {
-            if (state is AddedProductsState) {
+            if (state is AddedProductsSuccesState) {
               totalProduct = HiveBoxes.totalPriceBox.values.toList();
               isSelected = true;
             }
@@ -136,9 +132,17 @@ class _RightPageState extends State<RightPage> {
                 ])));
           }),
           BlocConsumer<AddProductBloc, AddProductState>(
-            listener: (context, state) {},
+            listener: (context, state) {
+              if (state is AddedProductsSuccesState) {
+                totalP = 0;
+                totalProduct.forEach((element) {
+                  totalP =
+                      totalP + ((element.quantity ?? 0) * (element.price ?? 0));
+                });
+              }
+            },
             builder: (context, state) {
-              if (state is AddedProductsState) {
+              if (state is AddedProductsSuccesState) {
                 return Padding(
                   padding: const EdgeInsets.only(top: 6),
                   child: Container(
@@ -167,25 +171,13 @@ class _RightPageState extends State<RightPage> {
                                   child: Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        BlocConsumer<AddProductBloc,
-                                                AddProductState>(
-                                            listener: (context, state) {
-                                          if (state is AddedProductsState) {
-                                            totalP = 0;
-                                            totalProduct.forEach((element) {
-                                              totalP = totalP +
-                                                  ((element.quantity ?? 0) *
-                                                      (element.price ?? 0));
-                                            });
-                                          }
-                                        }, builder: (context, state) {
-                                          return Text(
-                                            totalP.toString(),
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 22),
-                                          );
-                                        })
+                                        Text(
+                                          totalP.toString(),
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 22),
+                                        ),
+                                        // })
                                       ]),
                                 ),
                                 const SizedBox(width: 15),
@@ -204,6 +196,7 @@ class _RightPageState extends State<RightPage> {
                             myFocusNode.requestFocus();
                             totalP = 0;
                             totalProduct = [];
+                            product.quantity = 0;
                             HiveBoxes.totalPriceBox.clear();
                             setState(() {});
                           },

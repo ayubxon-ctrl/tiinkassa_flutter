@@ -20,7 +20,7 @@ class ProductModelAdapter extends TypeAdapter<TotalProduct> {
       name: fields[0] as String?,
       quantity: fields[1] as int?,
       price: fields[2] as num?,
-      barcode: fields[3] as int?,
+      barcode: fields[3] as String?,
       category: fields[4] as String?,
       sku: fields[5] as int?,
     );

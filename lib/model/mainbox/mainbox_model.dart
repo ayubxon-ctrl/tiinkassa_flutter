@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-
 import '../../Hive/adapters.dart';
 part 'mainbox_model.g.dart';
 
@@ -14,7 +13,7 @@ class MainBoxModel extends HiveObject {
   @HiveField(2)
   num? price;
   @HiveField(3)
-  int? barcode;
+  String? barcode;
   @HiveField(4)
   String? category;
   @HiveField(5)

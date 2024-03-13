@@ -12,7 +12,7 @@ class HiveBoxes {
       Hive.box<TotalProduct>(HiveBoxNames.productTotal);
   static final Box<MainBoxModel> mainBox =
       Hive.box<MainBoxModel>(HiveBoxNames.mainbox);
-  static final lastSku = Hive.box(HiveBoxNames.lastSku);
+  static final lastSku = Hive.box<int>(HiveBoxNames.lastSku);
 
   static Future<void> clearAllBoxes() async {
     await Future.wait([

@@ -10,7 +10,6 @@ import 'package:tiinkassa_flutter/model/mainbox/mainbox_model.dart';
 
 import 'package:tiinkassa_flutter/model/category/category_model.dart';
 import 'package:tiinkassa_flutter/model/totalproduct/totalproduct_model.dart';
-import 'package:tiinkassa_flutter/service/excel_cretate.dart';
 import 'package:tiinkassa_flutter/ui/right_page.dart';
 
 class MyWidget extends StatefulWidget {
@@ -92,7 +91,7 @@ class _MyWidgetState extends State<MyWidget> {
                   ),
                   IconButton(
                     onPressed: () {
-                      ExcelService().extractFile(totalProduct);
+                      HiveBoxes.clearAllBoxes();
 
                       myFocusNode.requestFocus();
                       setState(() {});
@@ -192,8 +191,8 @@ class _MyWidgetState extends State<MyWidget> {
                                                           '',
                                                       qcounter: 1,
                                                       barcode: barcode.text,
-                                                      productPrice:
-                                                          productPrice.text,
+                                                      productPrice: num.parse(
+                                                          productPrice.text),
                                                       sku: 0,
                                                     ));
                                                   } else {
@@ -204,8 +203,8 @@ class _MyWidgetState extends State<MyWidget> {
                                                       name: productName.text,
                                                       qcounter: 1,
                                                       barcode: barcode.text,
-                                                      productPrice:
-                                                          productPrice.text,
+                                                      productPrice: num.parse(
+                                                          productPrice.text),
                                                       sku: 0,
                                                     ));
                                                   }
@@ -267,21 +266,19 @@ class _MyWidgetState extends State<MyWidget> {
                                             borderRadius:
                                                 BorderRadius.circular(15)),
                                         onTap: () {
-                                          BlocProvider.of<AddProductBloc>(
-                                                  context)
-                                              .add(
-                                                  SaveProductEvent(
-                                                      barcode: boxM[index]
+                                          BlocProvider.of<
+                                                  AddProductBloc>(context)
+                                              .add(SaveProductEvent(
+                                                  barcode:
+                                                      boxM[index]
                                                           .barcode
                                                           .toString(),
-                                                      sku: boxM[index].sku!,
-                                                      productPrice: boxM[index]
-                                                          .price
-                                                          .toString(),
-                                                      qcounter: 1,
-                                                      name: boxM[index]
-                                                          .name
-                                                          .toString()));
+                                                  sku: boxM[index].sku!,
+                                                  productPrice:
+                                                      boxM[index].price ?? 0,
+                                                  qcounter: 1,
+                                                  name:
+                                                      boxM[index].name ?? ""));
 
                                           setState(() {});
                                         },

@@ -18,6 +18,6 @@ class HiveService {
     await Hive.openBox<CategoryForSale>(HiveBoxNames.openedOrder);
     await Hive.openBox<TotalProduct>(HiveBoxNames.productTotal);
     await Hive.openBox<MainBoxModel>(HiveBoxNames.mainbox);
-    await Hive.openBox(HiveBoxNames.lastSku);
+    await Hive.openBox<int>(HiveBoxNames.lastSku);
   }
 }

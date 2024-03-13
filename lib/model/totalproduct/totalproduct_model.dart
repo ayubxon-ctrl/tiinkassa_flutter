@@ -13,7 +13,7 @@ class TotalProduct extends HiveObject {
   @HiveField(2)
   num? price;
   @HiveField(3)
-  int? barcode;
+  String? barcode;
   @HiveField(4)
   String? category;
   @HiveField(5)
@@ -30,7 +30,7 @@ class TotalProduct extends HiveObject {
     name = json['name'];
     quantity = json['quantity'] ?? 1;
     price = json['price'] ?? 1;
-    barcode = json['barcode'] ?? 0;
+    barcode = json['barcode'].toString();
     category = json['category'] ?? 'each';
     sku = json['sku'] ?? 0;
   }

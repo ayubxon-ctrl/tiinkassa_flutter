@@ -51,7 +51,7 @@ class OrderedSingelton {
     HiveBoxes.prefsBox.put(sale.barcode.toString(), sale);
     TotalProduct product = TotalProduct(
       name: sale.name,
-      barcode: sale.barcode,
+      barcode: sale.barcode.toString(),
       quantity: qcounter,
       sku: 0,
       price: sale.price,
@@ -67,65 +67,52 @@ class OrderedSingelton {
     return true;
   }
 
-  static bool aaa({
+  static Future<bool> aaa({
     required String name,
     required String barcode,
-    required String productPrice,
+    required num productPrice,
     required int qcounter,
     required int sku,
-  }) {
-    // CategoryForSale sale = CategoryForSale(
-    //   name: catModel.name,
-    //   type: 'each',
-    //   category: 'each',
-    //   barcode: newbarcode,
-    //   price: newprice,
-    //   sku: counter,
-    // );
-    // HiveBoxes.prefsBox.put(sale.barcode.toString(), sale);
-// int a=LSKUR();
-//1004
-
+  }) async {
     product = TotalProduct(
       name: name,
-      barcode: int.parse(barcode),
+      barcode: barcode,
       quantity: 1,
       sku: 0,
-      price: num.parse(productPrice),
+      price: productPrice,
       category: "",
     );
 
     MainBoxModel? mm =
         HiveBoxes.mainBox.get(product.barcode, defaultValue: null);
-    HiveBoxes.totalPriceBox.values.toList();
     if (mm == null) {
       product.sku = OrderedSingelton.getLastSku();
     } else {
       product.sku = mm.sku;
-      product.quantity =
-          (HiveBoxes.totalPriceBox.get(product.barcode.toString())!.quantity! +
-              1);
+      TotalProduct? checkedProduct =
+          HiveBoxes.totalPriceBox.get(product.barcode, defaultValue: null);
+      checkedProduct != null
+          ? product.quantity = checkedProduct.quantity! + 1
+          : product.quantity = product.quantity! + 1;
     }
-    HiveBoxes.totalPriceBox.get(product.barcode.toString());
-    HiveBoxes.totalPriceBox.put(product.barcode.toString(), product);
-    return true;
+    return await HiveBoxes.totalPriceBox
+        .put(product.barcode.toString(), product)
+        .then((value) => true);
   }
 
   //int get LSKUR(){}
   static int getLastSku() {
     int a;
-    a = HiveBoxes.lastSku.get('lastSku');
+    a = HiveBoxes.lastSku.get('detectSku', defaultValue: 0) ?? 0;
     int b = a;
     b++;
-    HiveBoxes.lastSku.put('lastSku', b);
+    HiveBoxes.lastSku.put('detectSku', b);
     return a;
   }
 
   static bool addmyBox() {
     List<TotalProduct> totalproduct = HiveBoxes.totalPriceBox.values.toList();
-
     List<MainBoxModel> setToMainBox = [];
-
     // ignore: avoid_function_literals_in_foreach_calls
     totalproduct.forEach((element) {
       MainBoxModel mainBox = MainBoxModel(
@@ -137,7 +124,7 @@ class OrderedSingelton {
       );
       setToMainBox.add(mainBox);
     });
-    Map<int, MainBoxModel> map = {};
+    Map<dynamic, MainBoxModel> map = {};
     for (var m in setToMainBox) {
       map[m.key] = m;
     }
