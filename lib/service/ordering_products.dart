@@ -27,47 +27,7 @@ class OrderedSingelton {
     }
   }
 
-  static bool clearAllProducts() {
-    // HiveBoxes.clearAllBoxes();
-    return true;
-  }
-
-  static bool addNoProduct(
-      {required String barcode,
-      required String productPrice,
-      required String productName,
-      required int counter,
-      required int qcounter}) {
-    catModel = HiveBoxes.prefsBox.get(barcode) ?? CategoryForSale();
-    int newprice = int.parse(productPrice);
-    int newbarcode = int.parse(barcode);
-    CategoryForSale sale = CategoryForSale(
-      name: productName,
-      type: 'each',
-      category: 'each',
-      barcode: newbarcode,
-      price: newprice,
-    );
-    HiveBoxes.prefsBox.put(sale.barcode.toString(), sale);
-    TotalProduct product = TotalProduct(
-      name: sale.name,
-      barcode: sale.barcode.toString(),
-      quantity: qcounter,
-      sku: 0,
-      price: sale.price,
-      category: sale.category,
-    );
-    if (!totalProduct.any((element) => element.barcode == product.barcode)) {
-      product.quantity = product.quantity! + 1;
-      HiveBoxes.totalPriceBox.put(product.barcode.toString(), product);
-    }
-    productName = '';
-    productPrice = '';
-    myFocusNode.requestFocus();
-    return true;
-  }
-
-  static Future<bool> aaa({
+  static Future<bool> addProduct({
     required String name,
     required String barcode,
     required num productPrice,
@@ -78,7 +38,7 @@ class OrderedSingelton {
       name: name,
       barcode: barcode,
       quantity: 1,
-      sku: 0,
+      sku: sku,
       price: productPrice,
       category: "",
     );
@@ -89,6 +49,7 @@ class OrderedSingelton {
       product.sku = OrderedSingelton.getLastSku();
     } else {
       product.sku = mm.sku;
+      product.quantity = 0;
       TotalProduct? checkedProduct =
           HiveBoxes.totalPriceBox.get(product.barcode, defaultValue: null);
       checkedProduct != null

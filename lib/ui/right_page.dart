@@ -1,14 +1,14 @@
 // ignore_for_file: unused_local_variable, avoid_function_literals_in_foreach_calls, sized_box_for_whitespace, non_constant_identifier_names
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:tiinkassa_flutter/Hive/hive_instance_class.dart';
 import 'package:tiinkassa_flutter/bloc/cardsifatidaq/addptocard_bloc.dart';
-
 import 'package:tiinkassa_flutter/bloc/yangi%20qoshuvch/add_product_bloc.dart';
 import 'package:tiinkassa_flutter/model/category/category_model.dart';
 import 'package:tiinkassa_flutter/model/mainbox/mainbox_model.dart';
 import 'package:tiinkassa_flutter/model/totalproduct/totalproduct_model.dart';
-import 'package:tiinkassa_flutter/service/ordering_products.dart';
+import 'package:tiinkassa_flutter/model/view_model.dart';
 
 class RightPage extends StatefulWidget {
   const RightPage({super.key});
@@ -142,79 +142,83 @@ class _RightPageState extends State<RightPage> {
               }
             },
             builder: (context, state) {
-              if (state is AddedProductsSuccesState) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 1,
-                    height: 180,
-                    color: const Color.fromARGB(255, 17, 30, 63),
-                    child: Row(
-                      children: [
-                        Column(
-                          children: [
-                            const SizedBox(height: 15),
-                            Row(
-                              children: [
-                                const SizedBox(width: 5),
-                                const Text(
-                                  'Total Price',
-                                  style: TextStyle(
-                                      fontSize: 25, color: Colors.white),
-                                ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.12),
-                                Container(
-                                  width: 200,
-                                  height: 30,
-                                  child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          totalP.toString(),
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 22),
-                                        ),
-                                        // })
-                                      ]),
-                                ),
-                                const SizedBox(width: 15),
-                              ],
-                            ),
-                          ],
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
-                              backgroundColor: Colors.indigo.shade700,
-                              minimumSize: const Size(160, 160)),
-                          onPressed: () {
-                            myFocusNode.requestFocus();
-                            totalP = 0;
-                            totalProduct = [];
-                            product.quantity = 0;
-                            HiveBoxes.totalPriceBox.clear();
-                            setState(() {});
-                          },
-                          child: const Text(
-                            'Sell',
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white),
+              return Consumer<ProductsViewProvider>(
+                  builder: (context, value, child) {
+                if (ProductsViewProvider().chechIsnotEmpty.isNotEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 1,
+                      height: 180,
+                      color: const Color.fromARGB(255, 17, 30, 63),
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              const SizedBox(height: 15),
+                              Row(
+                                children: [
+                                  const SizedBox(width: 5),
+                                  const Text(
+                                    'Total Price',
+                                    style: TextStyle(
+                                        fontSize: 25, color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.12),
+                                  Container(
+                                    width: 200,
+                                    height: 30,
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            totalP.toString(),
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 22),
+                                          ),
+                                          // })
+                                        ]),
+                                  ),
+                                  const SizedBox(width: 15),
+                                ],
+                              ),
+                            ],
                           ),
-                        )
-                      ],
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                backgroundColor: Colors.indigo.shade700,
+                                minimumSize: const Size(160, 160)),
+                            onPressed: () {
+                              myFocusNode.requestFocus();
+                              totalP = 0;
+                              totalProduct = [];
+
+                              HiveBoxes.totalPriceBox.clear();
+                              setState(() {});
+                            },
+                            child: const Text(
+                              'Sell',
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              } else {
-                return const Text('');
-              }
+                  );
+                } else {
+                  return const Text('');
+                }
+              });
             },
           )
         ],

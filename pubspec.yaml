@@ -48,6 +48,7 @@ dependencies:
   build_runner: ^2.4.8
   fluttertoast: ^8.2.4
   shared_preferences: ^2.2.2
+  open_file: ^3.3.2
 
 dev_dependencies:
   flutter_test:

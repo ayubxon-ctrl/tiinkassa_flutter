@@ -13,7 +13,7 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
   ) async {
     bool isNext = false;
 
-    isNext = await OrderedSingelton.aaa(
+    isNext = await OrderedSingelton.addProduct(
       name: event.name,
       qcounter: event.qcounter,
       barcode: event.barcode,

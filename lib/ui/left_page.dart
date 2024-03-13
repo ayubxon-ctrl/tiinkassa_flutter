@@ -10,6 +10,7 @@ import 'package:tiinkassa_flutter/model/mainbox/mainbox_model.dart';
 
 import 'package:tiinkassa_flutter/model/category/category_model.dart';
 import 'package:tiinkassa_flutter/model/totalproduct/totalproduct_model.dart';
+import 'package:tiinkassa_flutter/service/excel_cretate.dart';
 import 'package:tiinkassa_flutter/ui/right_page.dart';
 
 class MyWidget extends StatefulWidget {
@@ -91,8 +92,9 @@ class _MyWidgetState extends State<MyWidget> {
                   ),
                   IconButton(
                     onPressed: () {
-                      HiveBoxes.clearAllBoxes();
-
+                      totalProduct.forEach((element) {
+                        ExcelService().extractFile(boxM);
+                      });
                       myFocusNode.requestFocus();
                       setState(() {});
                     },
