@@ -68,7 +68,6 @@ bool canPlaceFlowers(List<int> flowerbed, int n) {
     }
     if (toq[s] == 0) {
       countT++;
-      print(' case 3 $countT');
     }
   }
 
